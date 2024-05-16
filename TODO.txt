@@ -1,0 +1,17 @@
+
+
+What have I completed?
+
+- Basic form elements
+- Javascript function to check validity of the form data submitted.
+- JavaScript function within bookingJS.js to submit booking. (still need to manipulate and process data.)
+- Create GIT repository and relevant files for project so far.
+
+TODO:
+
+- All styling.
+- Validate street numbers as an actual number within 5 digits.
+- Enforce that the date and time entered can not be less than the current date and time.
+- Set up a MYSQL Assignment 2 database, along with a booking table.
+- Do all admin setups.
+- construct a function to generate booking ID's in booking.php
