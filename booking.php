@@ -4,7 +4,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles.css">
-        <script type="text/javascript" src="bookingJS.js"></script>
         <title>Taxi Booking System</title>
     </head>
     <body>
@@ -28,6 +27,10 @@
                 <input type="text" name="snumber" id="snumber" required>
             </div>
             <div class="booking_info">
+                <label for="stname">Street name:</label>
+                <input type="text" name="stname" id="stname" required>
+            </div>
+            <div class="booking_info">
                 <label for="sbname">Suburb Name: </label>
                 <input type="text" name="sbname" id="sbname">
             </div>
@@ -37,55 +40,36 @@
             </div>
 
             <div class="booking_info"> <!--Note: The pick up date and time can not be earlier than the current date and time -->
-                <?php $date = Date("d/m/Y");?>
-
                 <label for="date">Pick up date: </label>
-                <input type="text" name="date" id="date" value="<?=$date?>" pattern="\d{1,2}/\d{2}/\d{4}" 
+                <input type="text" name="date" id="date" pattern="\d{1,2}/\d{2}/\d{4}" 
                     title="Date must follow the format of: dd/mm/yyyy" required>
             </div>
             <div class="booking_info">
-                <?php 
-                    date_default_timezone_set('Pacific/Auckland');
-                    $time = date("H:i")
-                ?>
                 <label for="time">Pick up time: </label>
-                <input type="text" name="time" id="time" value="<?=$time?>" pattern="\d{1,2}:\d{1,2}" 
+                <input type="text" name="time" id="time" pattern="\d{1,2}:\d{1,2}" 
                     title="Pick up time must be in 24 hour time (HH:MM) e.g., 18:30" required>        
             </div>
 
-            <div class="booking_info">
-                <input type="submit" id="submit_button" value="Book" 
-                       onclick="submitForm(event)">
-            </div>
-
             <script>
-                // Submit form function only allows the submitBooking function to be called when all REQUIRED
-                // parts of the form have been submitted.
+                var current_date_time = new Date();
+                var date = current_date_time.toLocaleDateString('en-NZ');
 
-                function submitForm(event){
-                    event.preventDefault();
+                // HH:MM format described in parameters.
+                var time = current_date_time.toLocaleTimeString('en-NZ', {hour12: false, hour: '2-digit', minute: '2-digit'});
 
-                    document.getElementById('confirmation_msg').innerHTML = "";
-
-                    if(isFormValid()){
-                        submitBooking('confirmation_msg', cname.value, phone.value, unumber.value, snumber.value, sbname.value, dsbname.value, date.value, time.value);
-                    }
-                    else{
-                        console.log("da form was not filled out mayn"); //Need to update a error div.
-                        document.getElementById('confirmation_msg').innerHTML = "Error creating booking. Please ensure all required fields are filled out.";
-                    }
-                }
-
-                function isFormValid(){
-                    var form =document.getElementById("booking_form");
-                    return form.checkValidity();
-                }
+                document.getElementById('date').value = date;
+                document.getElementById('time').value = time;
             </script>
 
+            <div class="booking_info">
+                <input type="submit" id="submit_button" value="Book" onclick="submitForm(event)">
+            </div>
 
-            <div id="confirmation_msg">
+            <div id="reference">
 
             </div>
         </form>
+
+        <script type="text/javascript" src="bookingJS.js"></script>
     </body>
 </html>
