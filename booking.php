@@ -1,75 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
-        <title>Taxi Booking System</title>
-    </head>
-    <body>
-        <h1 id="booking_header">Taxi Booking System</h1>
-        <br>
-        <form id="booking_form">
-            <div class="booking_info">
-                <label for="cname">Customer Name: </label>
-                <input type="text" name="cname" id="cname" required>
-            </div>
-            <div class="booking_info">
-                <label for="phone">Phone Number: </label>
-                <input type="text" name="phone" id="phone" pattern="\d{10,12}" title="Valid phone numbers require 10-12 digits" required>
-            </div>
-            <div class="booking_info">
-                <label for="unumber">Unit Number: </label>
-                <input type="text" name="unumber" id="unumber">
-            </div>
-            <div class="booking_info">
-                <label for="snumber">Street Number: </label>
-                <input type="text" name="snumber" id="snumber" required>
-            </div>
-            <div class="booking_info">
-                <label for="stname">Street name:</label>
-                <input type="text" name="stname" id="stname" required>
-            </div>
-            <div class="booking_info">
-                <label for="sbname">Suburb Name: </label>
-                <input type="text" name="sbname" id="sbname">
-            </div>
-            <div>
-                <label for="dsbname">Destination Suburb: </label>
-                <input type="text" name="dsbname" id="dsbname">
-            </div>
+<?php
+    session_start();    
+                   
+    if(!isset($_SESSION["ref_number"])){    
+        $_SESSION["ref_number"] = 1;        
+    }
+    else{
+        $_SESSION["ref_number"]++;
+    }
 
-            <div class="booking_info"> <!--Note: The pick up date and time can not be earlier than the current date and time -->
-                <label for="date">Pick up date: </label>
-                <input type="text" name="date" id="date" pattern="\d{1,2}/\d{2}/\d{4}" 
-                    title="Date must follow the format of: dd/mm/yyyy" required>
-            </div>
-            <div class="booking_info">
-                <label for="time">Pick up time: </label>
-                <input type="text" name="time" id="time" pattern="\d{1,2}:\d{1,2}" 
-                    title="Pick up time must be in 24 hour time (HH:MM) e.g., 18:30" required>        
-            </div>
+    //Generating the booking reference number. 
+    $ref_num = $_SESSION['ref_number'];
+    $br = "BRN" . str_pad($ref_num, 5, "0", STR_PAD_LEFT);
 
-            <script>
-                var current_date_time = new Date();
-                var date = current_date_time.toLocaleDateString('en-NZ');
+    $cname = $_POST['name'];
+    $phone = $_POST['phone'];
+    $unit = $_POST['unit'];
+    $st_number = $_POST['street_number'];
+    $st_name = $_POST['street_name'];
+    $suburb = $_POST['suburb'];
+    $dest_suburb = $_POST['dest_suburb'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+?>
 
-                // HH:MM format described in parameters.
-                var time = current_date_time.toLocaleTimeString('en-NZ', {hour12: false, hour: '2-digit', minute: '2-digit'});
 
-                document.getElementById('date').value = date;
-                document.getElementById('time').value = time;
-            </script>
 
-            <div class="booking_info">
-                <input type="submit" id="submit_button" value="Book" onclick="submitForm(event)">
-            </div>
+<!-- Database connection -->
+<?php
+    $servername = "localhost";
+    $username = "root";
+    $dbname = "a2database";
+    $pswd = "";
+    
+    try{
 
-            <div id="reference">
+        $conn = new mysqli($servername, $username, $pswd, $dbname);
+    }
+    catch(Exception $e){
+        echo $e->getMessage();
+    }
 
-            </div>
-        </form>
+    if($conn->connect_error){
+        die("Connection to DB failed: " .$conn->connect_error);
+    }
+    else{
+        // Successful DB connection
+        // create table.
 
-        <script type="text/javascript" src="bookingJS.js"></script>
-    </body>
-</html>
+        $query = "SHOW TABLES LIKE 'bookings'";
+
+        $result = $conn->query($query);
+
+        if($result->num_rows == 0){
+            $query = "CREATE TABLE bookings(
+                reference VARCHAR(8),
+                cname TEXT NOT NULL,
+                phone INT NOT NULL,
+                unit INT,
+                streetNo INT NOT NULL,
+                streetName TEXT NOT NULL,
+                suburb TEXT,
+                destSuburb TEXT,
+                date TEXT NOT NULL,
+                time TEXT NOT NULL,
+                PRIMARY KEY (reference)
+                )";
+
+            try{
+                $conn->query($query);
+            }catch(Exception $e){
+                echo "Error executing table creation query: " . $e->getMessage();
+            }
+        }
+
+        try{
+            $stmt = $conn->prepare(
+                "INSERT INTO bookings(reference, cname, phone, unit, streetNo, streetName, suburb,
+                                      destSuburb, date, time)
+                VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            );
+
+            if($stmt === false){
+                die("Statement preperation failed: " . $conn->errno . "Error: " . $conn->error);
+            }
+
+            $stmt->bind_param("ssiiisssss", 
+                $br, $cname, $phone, $unit, $st_number, $st_name,
+                $suburb, $dest_suburb, $date, $time
+            );
+
+
+            if(!$stmt->execute()){
+                echo "Execution of statement failed: " .$stmt->errno . " | " . $stmt->error;
+            }
+            else{
+
+                echo "<p><h3>Thank you for your booking!</h3>" 
+                . "<br>Booking reference number: " . $br
+                . "<br>Pickup time: " . $time
+                . "<br>Pickup date: " . $date . "</p>";
+            }
+            $stmt->close();
+            $conn->close();
+        }
+        catch(Exception $e){
+            echo "Error creating booking: " . $e->getMessage();
+        }
+    }
+?>

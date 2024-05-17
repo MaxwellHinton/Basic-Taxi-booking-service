@@ -74,7 +74,7 @@ function isFormValid(){
 function submitBooking(targetDiv, cname, phone, unumber, snumber, stname, sbname, dsbname, date, time){
 
     var referenceDiv = document.getElementById(targetDiv);
-    var url = "bookingprocess.php";
+    var url = "booking.php";
 
     var formData = new FormData();
     formData.append("name", cname);

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
+        <title>Taxi Booking System</title>
+    </head>
+    <body>
+        <h1 id="booking_header">Taxi Booking System</h1>
+        <br>
+        <form id="booking_form">
+            <div class="booking_info">
+                <label for="cname">Customer Name: </label>
+                <input type="text" name="cname" id="cname" required>
+            </div>
+            <div class="booking_info">
+                <label for="phone">Phone Number: </label>
+                <input type="text" name="phone" id="phone" pattern="\d{10,12}" title="Valid phone numbers require 10-12 digits" required>
+            </div>
+            <div class="booking_info">
+                <label for="unumber">Unit Number: </label>
+                <input type="text" name="unumber" id="unumber">
+            </div>
+            <div class="booking_info">
+                <label for="snumber">Street Number: </label>
+                <input type="text" name="snumber" id="snumber" required>
+            </div>
+            <div class="booking_info">
+                <label for="stname">Street name:</label>
+                <input type="text" name="stname" id="stname" required>
+            </div>
+            <div class="booking_info">
+                <label for="sbname">Suburb Name: </label>
+                <input type="text" name="sbname" id="sbname">
+            </div>
+            <div>
+                <label for="dsbname">Destination Suburb: </label>
+                <input type="text" name="dsbname" id="dsbname">
+            </div>
+
+            <div class="booking_info"> <!--Note: The pick up date and time can not be earlier than the current date and time -->
+                <label for="date">Pick up date: </label>
+                <input type="text" name="date" id="date" pattern="\d{1,2}/\d{2}/\d{4}" 
+                    title="Date must follow the format of: dd/mm/yyyy" required>
+            </div>
+            <div class="booking_info">
+                <label for="time">Pick up time: </label>
+                <input type="text" name="time" id="time" pattern="\d{1,2}:\d{1,2}" 
+                    title="Pick up time must be in 24 hour time (HH:MM) e.g., 18:30" required>        
+            </div>
+
+            <script>
+                var current_date_time = new Date();
+                var date = current_date_time.toLocaleDateString('en-NZ');
+
+                // HH:MM format described in parameters.
+                var time = current_date_time.toLocaleTimeString('en-NZ', {hour12: false, hour: '2-digit', minute: '2-digit'});
+
+                document.getElementById('date').value = date;
+                document.getElementById('time').value = time;
+            </script>
+
+            <div class="booking_info">
+                <input type="submit" id="submit_button" value="Book" onclick="submitForm(event)">
+            </div>
+
+            <div id="reference">
+
+            </div>
+        </form>
+
+        <script type="text/javascript" src="bookingJS.js"></script>
+    </body>
+</html>
