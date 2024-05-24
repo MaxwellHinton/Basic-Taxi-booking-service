@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
+        <title>Admin System</title>
+    </head>
+    <body>
+        <h1 class="main_headers">Administrator System</h1>
+
+        <label for="bsearch" id="bsearch_label">Search database: </label>
+        <input type="text" name="bsearch" id="bsearch">
+        <input type="button" name="sbutton" class="sbutton" onclick="searchDB(document.getElementById('bsearch').value)" value="Go!">
+        
+        <div class="content">
+            
+        </div>
+        <div id="feedback_div">
+
+        </div>
+
+        <div class="link">
+            <a href="booking.html">Return to Booking site.</a>
+        </div>
+        <script type="text/javascript" src="admin.js"></script>
+    </body>
+</html>
+

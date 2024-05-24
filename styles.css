@@ -1,0 +1,187 @@
+
+/* Table Styling */
+.table{
+    border-collapse: collapse;
+    margin: 25px 0;
+    margin-left: 24px;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0 ,0.15);
+    table-layout: auto;
+}
+
+.table thead{
+    background-color: #4CAF50;
+    color: #ffff;
+}
+
+.table th{
+    text-align: left;
+    padding: 12px;
+    border: 1px solid black;
+}
+.table tr{
+    border-bottom: 1px solid #dddd;
+}
+
+.table td, .table th{
+    padding: 12px 15px;
+    border: 1px solid black;
+}
+
+/* Booking Page Styling */
+
+.booking_form {
+    margin-left: 20px;
+}
+
+.booking_info {
+    margin-bottom: 10px;
+}
+
+.booking_info label {
+    display: inline-block;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    margin-left: 24px;
+    margin-right: 10px;
+    width: 140px;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.booking_info input[type="text"], 
+.booking_info input[type="submit"] {
+    padding: 8px;
+    width: 200px; 
+    box-sizing: border-box; 
+    border-radius: 8px;
+    vertical-align: middle;
+}
+
+#submit_button {
+    background-color: #4CAF50;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 15px 32px;
+    margin-left: 24px;
+    margin-top: 12px;
+}
+
+#submit_button:hover {
+    background-color: #45a049; 
+    box-shadow: 0px 5px solid black;
+}
+
+#reference{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+}
+
+#reference.visible{
+    display: block;
+}
+
+/* Admin Page Styling */
+
+.main_headers{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 40px;
+    margin-left: 20px;
+    color: solid black;
+    padding : 6px 6px 6px 24px;
+}
+
+#bsearch{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 6px 32px;
+    text-decoration: none;
+    font-size: 16px;
+    color: solid black;
+    border-radius: 12px;
+}
+
+#bsearch_label{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 6px 6px 6px 24px;
+    text-decoration: none;
+    font-size: 24px;
+    color: solid black;
+}
+
+.sbutton {
+    background-color: #4CAF50; 
+    border: none;             
+    color: white;            
+    padding: 15px 32px;       
+    text-align: center;       
+    text-decoration: none;    
+    display: inline-block;    
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px;          
+    margin: 4px 2px;          
+    cursor: pointer;          
+    border-radius: 12px;      
+    transition: background-color 0.3s ease; 
+}
+
+.sbutton:hover {
+    background-color: #45a049; 
+    box-shadow: 0px 5px solid black;
+}
+
+.link{
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    margin: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    color: solid black;
+    text-decoration: none;
+
+}
+
+.link:hover{
+    text-decoration: underline;
+}
+
+
+/* Admin error styling i.e., wrong search format.*/
+#feedback_div{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 2px solid red;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+}
+
+#feedback_div.visible{
+    display: block;
+}

@@ -4,10 +4,10 @@
 function submitForm(event){
     event.preventDefault();
     
-    document.getElementById('reference').innerHTML = "";
+    var targetDiv = document.getElementById('reference');
+    targetDiv.innerHTML = "";
 
     // Need to check the date and time is not less than the current date/time.
-
     var current_date_time = new Date();
     var current_date = current_date_time.toLocaleDateString('en-NZ');
 
@@ -17,12 +17,17 @@ function submitForm(event){
     var selected_time = document.getElementById('time').value;
     var selected_date = document.getElementById('date').value;
 
+    // if any error is found in the form, make the div visible and set border to red.
     if(!compare_dates(current_date, selected_date)){
         
-        document.getElementById('reference').innerHTML = "Error: You can not make a booking for a past date!";
+        targetDiv.classList.add('visible');
+        targetDiv.style.border = "2px solid red";
+        targetDiv.innerHTML = "</p>Error: You can not make a booking for a past date!</p>";
     }
     else if(selected_time < current_time){
-        document.getElementById('reference').innerHTML = "Error: You can not make a booking for a past time!";
+        targetDiv.classList.add('visible');
+        targetDiv.style.border = "2px solid red";
+        targetDiv.innerHTML = "</p>Error: You can not make a booking for a past time!</p>";
     }
     else{
         // The user has entered a valid date and time.
@@ -32,7 +37,9 @@ function submitForm(event){
         }
         else{
             //Need to update a error div.
-            document.getElementById('reference').innerHTML = "Error creating booking. Please ensure all required fields are filled out.";
+            targetDiv.classList.add('visible');
+            targetDiv.style.border = "2px solid red";
+            targetDiv.innerHTML = "<p>Error creating booking. Please ensure all required fields are filled out.</p>";
         }
     }
 }
@@ -66,7 +73,7 @@ function compare_dates(current_date, selected_date){
 
 // Verifies all required parts of the form have been filled out.
 function isFormValid(){
-    var form =document.getElementById("booking_form");
+    var form = document.querySelector('.booking_form');
     return form.checkValidity();
 }
 
@@ -94,6 +101,10 @@ function submitBooking(targetDiv, cname, phone, unumber, snumber, stname, sbname
     requestPromise.then(
         function(response){
             response.text().then(function(text){
+
+                // Make the div visible and change its border to green.
+                referenceDiv.classList.add('visible');
+                referenceDiv.style.border = "2px solid #4CAF50";
                 referenceDiv.innerHTML = text;
             });
         }
