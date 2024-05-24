@@ -21,6 +21,7 @@
     $dest_suburb = $_POST['dest_suburb'];
     $date = $_POST['date'];
     $time = $_POST['time'];
+    $status = "Unassigned";
 ?>
 
 
@@ -33,7 +34,6 @@
     $pswd = "";
     
     try{
-
         $conn = new mysqli($servername, $username, $pswd, $dbname);
     }
     catch(Exception $e){
@@ -63,6 +63,7 @@
                 destSuburb TEXT,
                 date TEXT NOT NULL,
                 time TEXT NOT NULL,
+                status TEXT,
                 PRIMARY KEY (reference)
                 )";
 
@@ -76,17 +77,17 @@
         try{
             $stmt = $conn->prepare(
                 "INSERT INTO bookings(reference, cname, phone, unit, streetNo, streetName, suburb,
-                                      destSuburb, date, time)
-                VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                                      destSuburb, date, time, status)
+                VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
 
             if($stmt === false){
                 die("Statement preperation failed: " . $conn->errno . "Error: " . $conn->error);
             }
 
-            $stmt->bind_param("ssiiisssss", 
+            $stmt->bind_param("ssiiissssss", 
                 $br, $cname, $phone, $unit, $st_number, $st_name,
-                $suburb, $dest_suburb, $date, $time
+                $suburb, $dest_suburb, $date, $time, $status
             );
 
 
