@@ -1,45 +1,44 @@
 // searchDB function is called upon clicking the HTML GO button. It checks what type of query is being asked and provides feedback.
-
+// First removing the content in the contentDiv and setting the feedbackdiv go visible or not.
 function searchDB(query){
 
+    var feedbackDiv = document.getElementById('feedback_div');
+    var contentDiv = document.querySelector('.content');
+    contentDiv.innerHTML = "";
+
+    if(feedbackDiv.classList.contains('visible')){
+        feedbackDiv.classList.remove('visible');
+    }
+
     if(isEmpty(query)){
-        // query empty, query da table
-        
-        console.log("Query is empty");
-        
+
         var result = retrieveRows(query, "empty");
-        
         return;
-        
     }
     else if(isReference(query)){
-        // We can query DB
-        
-        console.log("query is in a valid reference format: " + query); 
-        // need to trim again as isReference does not return the trimmed string.
+        // Trim again as isReference does not return the trimmed string.
         
         trimmed_query = query.trim();
         
         var result = retrieveRows(trimmed_query, "reference");
-        console.log("OUT OF RETREIEVE ROWS");
-        
         return;
-        
     }
-    
-    document.querySelector('.content').innerHTML = "Your Query is invalid. Please enter a valid reference format (BRN00000) or nothing.";
-    
+    feedbackDiv.classList.add('visible');
+    feedbackDiv.innerHTML = "Your Query is invalid. Please enter a valid reference format (BRN00000) or nothing.";
 }
 
 // RetrieveRows connects with the server side file and displays the servers response in the content div.
-
+// The function dynamically creates the table and inserts it into the div.
 
 function retrieveRows(query, search_type){
     
     // Select div and create a fetch request.
 
     var contentDiv = document.querySelector('.content');
-    contentDiv.innerHTML = "";
+
+    // get feedback div for no matches or error status.
+    var feedbackDiv = document.getElementById('feedback_div');
+    
     var url = 'admin.php';
     
     var formData = new FormData();
@@ -51,22 +50,27 @@ function retrieveRows(query, search_type){
         body: formData
     })
     requestPromise.then(response => response.json()).then(data => {
-
+        
         // Reset the content Div.
         contentDiv.innerHTML = "";
+        feedbackDiv.innerHTML = "";
         
         // Determine the status sent from the server
         const status = data.status;
         if(status == "error"){
-            contentDiv.innerHTML += data.message;
+            feedbackDiv.classList.add('visible');
+            feedbackDiv.innerHTML += data.message;
         }
         else if(status == "no_results"){
-            contentDiv.innerHTML += data.message;
+            feedbackDiv.classList.add('visible');
+            feedbackDiv.innerHTML += data.message;
         }
         else if(status == "success"){
 
-            // Dynamically create table and attatch to the div.
+            // assign isWithin to the server's result.
+            var isWithin = data.isWithin;
 
+            // Dynamically create table and attatch to the div at the end.
             var table = document.createElement('table');
 
             // Add class name for styling.
@@ -89,6 +93,7 @@ function retrieveRows(query, search_type){
             headerRow.appendChild(th_assign);
             
             thead.appendChild(headerRow);
+            
             table.appendChild(thead);
             
             // Creating row elements.
@@ -108,38 +113,35 @@ function retrieveRows(query, search_type){
                     trBody.appendChild(td);
                 });
                 
-                
-                // Creating the assign button element.
-                var td_assign = document.createElement('td');
-                var assign_btn = document.createElement('button');
-                assign_btn.innerText = "Assign";
-                assign_btn.className = "assign-btn";
-                
-                assign_btn.addEventListener('click', function(){
-                    
-                    // Get the status id associated with this rows 'Assign' button.
-                    var statusToChange = "status_" + rowData['reference'];
-                    
-                    // Retrieve the actual element.
-                    var statusCell = document.getElementById(statusToChange);
+                // isWithin will be true if the server deems the booking within two hours of the current time
+                if((rowData['status'] === "Unassigned") && isWithin){
 
-                    // Set to Assigned.
-                    statusCell.innerText = "Assigned";
-
-                    // Call function to send another fetch request to update it on the server-side.
-                    // Pass in reference number to adjust.
-                    var updatedStatus = assignBooking('reference');
-                    if(updatedStatus){
-                        console.log("Status was updated.");
-                    }
-                    else{
-                        console.log("error updating status");
-                    }
+                    // Creating the assign button element.
+                    var td_assign = document.createElement('td');
+                    var assign_btn = document.createElement('button');
+                    assign_btn.innerText = "Assign";
+                    assign_btn.className = "assign-btn";
                     
-                });
-                
-                td_assign.appendChild(assign_btn);
-                trBody.appendChild(td_assign);
+                    assign_btn.addEventListener('click', function(){
+                        
+                        // Get the status id associated with this rows 'Assign' button.
+                        var statusToChange = "status_" + rowData['reference'];
+                        
+                        // Retrieve the actual element.
+                        var statusCell = document.getElementById(statusToChange);
+    
+                        // Set to Assigned.
+                        statusCell.innerText = "Assigned";
+    
+                        // Call function to send another fetch request to update it on the server-side.
+                        // Pass in reference number to adjust.
+                        assignBooking(rowData['reference']);
+                        
+                    });
+                    
+                    td_assign.appendChild(assign_btn);
+                    trBody.appendChild(td_assign);
+                }
                 
                 tbody.appendChild(trBody);
             });
@@ -149,7 +151,6 @@ function retrieveRows(query, search_type){
         }
     })
 }
-
 
 
 // isEmpty returns TRUE if a string is empty, null, or a string of only spaces and returns FALSE otherwise.
@@ -164,20 +165,17 @@ function isReference(string){
     return format.test(trimmed_string);
 }
 
+// assignBooking is called when the 'assign' button action listener is invoked.
+// It only communicates with the server-side by using the POST method to send the reference (booking) 
+// to be assigned.
 function assignBooking(reference){
 
     var url = 'admin.php';
-    
     var formData = new FormData();
-    
     formData.append("update", reference);
 
-    const requestPromise = fetch(url, {
+    fetch(url, {
         method: 'POST',
         body: formData
-    })
-    requestPromise.then(response => response.json()).then(data => {
-
-    })
-
+    });
 }

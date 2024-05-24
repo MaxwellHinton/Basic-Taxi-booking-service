@@ -7,18 +7,21 @@
         <title>Admin System</title>
     </head>
     <body>
-        <h1 id="admin_header">Administrator System</h1>
+        <h1 class="main_headers">Administrator System</h1>
 
-        <div>
-            <label for="bsearch">Search database: </label>
-            <input type="text" name="bsearch" id="bsearch">
-        </div>
-        <div>
-            <label for="sbutton">Go!</label>
-            <input type="button" name="sbutton" id="sbutton" onclick="searchDB(document.getElementById('bsearch').value)">
-        </div>
+        <label for="bsearch" id="bsearch_label">Search database: </label>
+        <input type="text" name="bsearch" id="bsearch">
+        <input type="button" name="sbutton" class="sbutton" onclick="searchDB(document.getElementById('bsearch').value)" value="Go!">
+        
         <div class="content">
             
+        </div>
+        <div id="feedback_div">
+
+        </div>
+
+        <div class="link">
+            <a href="booking.html">Return to Booking site.</a>
         </div>
         <script type="text/javascript" src="admin.js"></script>
     </body>

@@ -1,5 +1,5 @@
 <?php
-    session_start();    
+    session_start();  
                    
     if(!isset($_SESSION["ref_number"])){    
         $_SESSION["ref_number"] = 1;        
@@ -23,8 +23,6 @@
     $time = $_POST['time'];
     $status = "Unassigned";
 ?>
-
-
 
 <!-- Database connection -->
 <?php
@@ -70,11 +68,13 @@
             try{
                 $conn->query($query);
             }catch(Exception $e){
-                echo "Error executing table creation query: " . $e->getMessage();
+                echo "<p>Error executing table creation query: " . $e->getMessage() . "</p>";
             }
         }
 
         try{
+
+            // Prepare an insert statement using bind-param.
             $stmt = $conn->prepare(
                 "INSERT INTO bookings(reference, cname, phone, unit, streetNo, streetName, suburb,
                                       destSuburb, date, time, status)
@@ -90,9 +90,8 @@
                 $suburb, $dest_suburb, $date, $time, $status
             );
 
-
             if(!$stmt->execute()){
-                echo "Execution of statement failed: " .$stmt->errno . " | " . $stmt->error;
+                echo "<p>Execution of statement failed: " .$stmt->errno . " | " . $stmt->error . "</p>";
             }
             else{
 
@@ -105,7 +104,7 @@
             $conn->close();
         }
         catch(Exception $e){
-            echo "Error creating booking: " . $e->getMessage();
+            echo "<p>Error creating booking: " . $e->getMessage() ."</p>";
         }
     }
 ?>

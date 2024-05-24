@@ -14,16 +14,24 @@ CREATE TABLE bookings(
             PRIMARY KEY (reference)
                 )
 
+
 --- Inserting Data into Table --- Used with bind-param ---
 
 INSERT INTO bookings(reference, cname, phone, unit, streetNo, streetName, suburb, destSuburb, date, time)
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
             
+
 --- Table query for no input ---
 
 SELECT * FROM bookings WHERE status = 'Unassigned' AND time < '$timeTwoHoursLater'
 
+
 --- Table query for a reference number ---
 
 SELECT * FROM bookings WHERE reference = '$query'
+
+
+--- Statement to update the status to Assigned ---
+
+UPDATE bookings SET status = 'Assigned' WHERE reference = '$ref_toUpdate'

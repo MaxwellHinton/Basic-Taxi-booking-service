@@ -7,9 +7,9 @@
         <title>Taxi Booking System</title>
     </head>
     <body>
-        <h1 id="booking_header">Taxi Booking System</h1>
+        <h1 class="main_headers">Taxi Booking System</h1>
         <br>
-        <form id="booking_form">
+        <form class="booking_form">
             <div class="booking_info">
                 <label for="cname">Customer Name: </label>
                 <input type="text" name="cname" id="cname" required>
@@ -34,7 +34,7 @@
                 <label for="sbname">Suburb Name: </label>
                 <input type="text" name="sbname" id="sbname">
             </div>
-            <div>
+            <div class="booking_info">
                 <label for="dsbname">Destination Suburb: </label>
                 <input type="text" name="dsbname" id="dsbname">
             </div>
@@ -61,12 +61,15 @@
                 document.getElementById('time').value = time;
             </script>
 
-            <div class="booking_info">
-                <input type="submit" id="submit_button" value="Book" onclick="submitForm(event)">
-            </div>
+
+            <input type="submit" id="submit_button" value="Book" onclick="submitForm(event)">
+            
 
             <div id="reference">
+            </div>
 
+            <div class="link">
+                <a href="admin.html">Administrator Page</a>
             </div>
         </form>
 
